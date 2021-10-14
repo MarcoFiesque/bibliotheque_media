@@ -1,0 +1,44 @@
+extends ../layout/base
+block flashes
+  if message
+    div(class=`alert alert-${message.type} mt-2`)
+      |#{message.content}
+block title
+    | Liste des livres de #{author.firstname}  #{author.lastname} ( #{books.length} )
+block content
+    .container
+        table.table.text-center.monTableau#tableauLivres
+            thead
+                tr.table-dark
+                th Image
+                th Titre
+                th Auteur 
+                th Pages 
+                th description  
+                th(colspan="2") Actions
+            tbody
+                each book in books
+                    tr
+                        td
+                            img(src=`/images/${book.image}`, width= "60px", alt=`${book.title}-image`)
+                        td 
+                            a.caps(href=`/books/${book._id}`) #{book.title}
+                        td
+                            a.caps(href=`/authors/${book.author._id}`) #{book.author.firstname} #{book.author.lastname}
+                        td 
+                            |#{book.pages} 
+                        td.caps 
+                            |#{book.description }
+                        td 
+                            a(href=`/books/edit/${book._id}`).btn.btn-warning.me-1.mb-1 Modifier
+                            form(action=`/books/delete/${book._id}`, method="POST" onSubmit="return confirm('Voulez-vous vraiment supprimer ?');").d-inline
+                                button.btn.btn-danger.me-1.mb-1 Supprimer
+        .row 
+            .col-md-6    
+                a.btn.btn-info.w-100.m-1.m-md-0(href="/books")
+                    |Tous les livres
+                    i.fas.fa-list.ms-2 
+            .col-md-6
+                a.btn.btn-info.w-100.m-1.m-md-0(href="/authors") 
+                    |Liste des auteurs
+                    i(class="far fa-id-card ms-2")

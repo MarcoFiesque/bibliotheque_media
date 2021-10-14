@@ -1,0 +1,28 @@
+extends ../layout/base
+block title 
+    |Ajout d'un auteur
+block content
+    form(action="/authors", method="POST")
+        .row.my-2
+            .col-6
+                .form-group 
+                    label Prénom 
+                    input(class="form-control", type="text", name="firstname", id="firstname")
+                .form-group 
+                    label Nom 
+                    input(class="form-control", type="text", name="lastname", id="lastname")
+                .form-group 
+                    label Age
+                    input(class="form-control", type="number", name="age", id="age")
+                .form-group 
+                    label Sexe 
+                    .form-check
+                        input(class="form-check-input", type="radio", name="sexe", id="flexRadioSexeFem", value=`${false}`, checked)
+                        label(class="form-check-label", for="flexRadioSexeFem")
+                            |Femme
+                    .form-check
+                        input(class="form-check-input", type="radio" name="sexe", id="flexRadioSexeMas", value=`${true}`)
+                        label(class="form-check-label", for="flexRadioSexeMas")
+                            |Homme
+        .row.gx-0
+            button(type="submit")#validationFormModif.btn.btn-success.mt-2 Valider

@@ -1,0 +1,68 @@
+extends ../layout/base
+
+block title
+  |#{book.title}
+block content
+  if !isModif
+    .row.my-2
+      .col-6
+        h2 Infos
+        div Auteur : 
+          a.caps(href=`/authors/${book.author._id}`) #{book.author.firstname} #{book.author.lastname}
+        div Année de publication : #{book.publication_year}
+        div Pages : #{book.pages}
+        div(style="max-width:70%")
+          img(class="mt-4 img-fluid w-100 img-thumbnail" src=`/images/${book.image}`, alt=`${book.image}-cover`)
+      .col-6 
+        h2 description 
+        div.caps #{book.description}
+  else
+    form(action="/books/modificationServer", method="POST")
+      input(type="hidden", name="identifiant", value=book._id)
+      .row.my-2
+        .col-6
+          .form-group 
+            label Titre 
+            input(class="form-control", type="text", name="title", id="title", value=book.title)
+          .form-group 
+            label Auteur 
+            select(name="author", id="author", class="form-select")
+              option(value="") - Choisir un auteur -
+              each author in authors  
+                if author.id == book.author.id
+                  option.bg-danger(value=author._id, selected) #{author.firstname} #{author.lastname}
+                else 
+                  option.bg-success(value=author._id) #{author.firstname} #{author.lastname}
+            div.text-end
+              a(href="/authors/create").text-primary Créer un nouvel auteur
+          .form-group 
+            label.form-label Année de publication
+            input(type="number", name="publication_year", id="publication_year", max=2022, placeholder="Année de publication", value=book.publication_year).form-control
+          .form-group 
+            label Pages 
+            input(class="form-control", type="number", name="pages", id="pages", value=book.pages)
+        .col-6
+          .form-group
+            label Description 
+            textarea(class="form-control", name="description", cols="30", rows="6") #{book.description}
+      .row.gx-0
+        button(type="submit")#validationFormModif.btn.btn-success.mt-2 Valider
+    form(action="/books/updateImage", method="POST", enctype="multipart/form-data").mt-4
+      input(type="hidden", name="identifiant" value=book._id).form-control
+      .row
+        img(src=`/images/${book.image}`, alt="image").col-3.img-fluid
+        .form-group.col-9.d-flex
+          div
+            label(for="image").d-block  Image
+            input(type="file", name="image", id="image", required).form-control-file.d-block
+            button(type="submit").btn.btn-primary.mt-2 Modifier l'image
+  .row
+    .col
+      if !isModif
+        a.mt-4.btn.btn-warning.w-100(href=`/books/edit/${book._id}`) 
+          i(class="fas fa-edit me-2") 
+          span Modifier 
+    .col
+      a.mt-4.btn.btn-secondary.w-100(href="/books") 
+        i(class="fas fa-chevron-left me-2") 
+        span Voir liste de tous les livres 

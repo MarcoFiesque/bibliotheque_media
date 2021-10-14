@@ -1,0 +1,39 @@
+extends ../layout/base
+
+block title 
+    div.caps Auteur : #{author.firstname} #{author.lastname}
+block content
+    .row
+         .card
+            .card-body
+                h2.caps Nom : #{author.lastname}
+                h2.caps Prénom : #{author.firstname}
+                if author.firstname && author.lastname != "unknown"
+                    div
+                        |Age :  #{author.age}
+                    div
+                        if author.sexe == true
+                            |Sexe : Homme
+                        else
+                            |Sexe : Femme 
+                if author.firstname && author.lastname != "unknown"
+                    .row.mt-3
+                        .col-auto 
+                            a(href=`/authors/edit/${author._id}`).btn.btn-warning.me-1.mb-1 Modifier
+                        .col-auto
+                            form(action=`/authors/delete/${author._id}`, method="POST" onSubmit="return confirm('Voulez-vous vraiment supprimer ?');").d-inline
+                                button.btn.btn-danger.me-1.mb-1 Supprimer
+    .row.mt-3
+        h1 Livres
+        each book in author.books 
+            .col-md-6
+                a(href=`/books/${book._id}`) 
+                    .card
+                        .card-body.d-flex
+                            div(style="max-width:60%").mb-3.mb-md-0
+                                img(class="img-fluid w-100 h-100 img-thumbnail" src=`/images/${book.image}`, alt=`${book.image}-cover`)
+                            div.ps-4
+                                div.caps
+                                    |Titre : #{book.title}
+                                div
+                                    |Nombre de pages : #{book.pages}

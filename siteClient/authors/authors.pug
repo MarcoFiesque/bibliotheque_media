@@ -1,0 +1,38 @@
+extends ../layout/base
+block flashes
+  if message
+    div(class=`alert alert-${message.type} mt-2`)
+      |#{message.content}
+
+block title
+  | Liste des auteurs - Biblioth&egrave;que Medias
+
+block content
+  .container
+    table.table.text-center.monTableau#tableauLivres
+      thead
+        tr.table-dark
+          th Prénom
+          th Nom
+          th Nombre de livres 
+          th(colspan="2") Actions
+      tbody
+        if authors
+          each author in authors
+            tr
+              td
+                a.caps(href=`/authors/${author._id}`) #{author.firstname} 
+              td
+                a.caps(href=`/authors/${author._id}`) #{author.lastname}
+              td 
+                a(href=`/authors/${author._id}/books`) #{authors.length} 
+              td
+                if author.firstname && author.lastname != "unknown"
+                  a(href=`/authors/edit/${author._id}`).btn.btn-warning.me-1.mb-1 Modifier
+                  form(action=`/authors/delete/${author._id}`, method="POST" onSubmit="return confirm('Voulez-vous vraiment supprimer ?');").d-inline
+                    button.btn.btn-danger.me-1.mb-1 Supprimer
+    a(href="/authors/create").btn.btn-success.w-100.my-3 
+      |Ajouter
+      i(class="fas fa-user-plus ms-2")
+block scripts
+  script(src="/javascript/main.js") 

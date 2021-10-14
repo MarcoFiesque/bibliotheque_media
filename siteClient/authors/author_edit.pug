@@ -1,0 +1,43 @@
+extends ../layout/base
+block title 
+    |Modification de l'auteur #{author.firstname} #{author.lastname}
+block content
+    form(action="/authors/modificationServer", method="POST")
+        input(type="hidden", name="identifiant", value=`${author._id}`)
+        .row.my-2
+            .col-6.mx-auto
+                .form-group 
+                    label Prénom 
+                    input(class="form-control", type="text", name="firstname", id="firstname", value=`${author.firstname}`)
+                .form-group 
+                    label Nom 
+                    input(class="form-control", type="text", name="lastname", id="lastname", value=`${author.lastname}`)
+                .form-group 
+                    label Age
+                    input(class="form-control", type="number", name="age", id="age", value=`${author.age}`)
+                .form-group 
+                    label Sexe 
+                    .form-check
+                        if author.sexe
+                            input(class="form-check-input", type="radio", name="sexe", id="flexRadioSexeFem", value=`${false}`)
+                        else
+                            input(class="form-check-input", type="radio", name="sexe", id="flexRadioSexeFem", value=`${false}`, checked)
+                        label(class="form-check-label", for="flexRadioSexeFem")
+                            |Femme
+                    .form-check
+                        if author.sexe
+                            input(class="form-check-input", type="radio" name="sexe", id="flexRadioSexeMas", value=`${true}`, checked)
+                        else
+                            input(class="form-check-input", type="radio" name="sexe", id="flexRadioSexeMas", value=`${true}`,)
+                        label(class="form-check-label", for="flexRadioSexeMas")
+                            |Homme
+        .row.mt-4
+            div.col-6.mx-auto
+                .row
+                    div.col
+                        a.w-100.btn.btn-secondary(href="/books") 
+                            i(class="fas fa-chevron-left me-2") 
+                            span Annuler modification
+                    div.col
+                        button.w-100(type="submit")#validationFormModif.btn.btn-success Valider
+                            i(class="fas fa-check ms-2")

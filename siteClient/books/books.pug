@@ -1,0 +1,71 @@
+extends ../layout/base
+block flashes
+  if message
+    div(class=`alert alert-${message.type} mt-2`)
+      |#{message.content}
+
+block title
+  | Biblioth&egrave;que Medias - Liste des livres
+block content
+  section.my-auto
+    table.table.text-center.monTableau#tableauLivres
+      thead
+        tr.table-dark
+          th Image
+          th Titre
+          th Auteur 
+          th Année de publication
+          th Pages
+          th description  
+          th(colspan="2") Actions
+      tbody
+        each book in books
+          tr
+            td
+              img(src=`/images/${book.image}`, width= "60px", alt=`${book.title}-image`)
+            td 
+              a.caps(href=`books/${book._id}`) #{book.title}
+            td
+              a.caps(href=`/authors/${book.author._id}`) #{book.author.firstname} #{book.author.lastname}
+            td #{book.publication_year ? book.publication_year : "Non renseignée"} 
+            td #{book.pages ? book.pages : "Non renseignée"} 
+            td.caps #{book.description }
+            td 
+              a(href=`/books/edit/${book._id}`).btn.btn-warning.me-1.mb-1 Modifier
+              form(action=`/books/delete/${book._id}`, method="POST" onSubmit="return confirm('Voulez-vous vraiment supprimer ?');").d-inline
+                button.btn.btn-danger.me-1.mb-1 Supprimer
+    button(onClick="ajoutFormulaire()").btn.btn-success.w-100.my-3 
+      |Ajouter
+      i(class="fas fa-plus ms-2")
+    form(action="", method="post", enctype="multipart/form-data")#ajoutForm.d-none.my-3
+      fieldset
+        legend Création d'un livre 
+        .form-group 
+          label.form-label Titre
+          input(type="text", name="title", id="title", required, placeholder="Titre du livre").form-control
+        .form-group 
+          label.form-label Auteur
+          select(name="author", id="author", required, class="form-select")
+            option(value="") - Choisir un auteur -
+            each author in authors 
+              option(value=`${author._id}`) #{author.firstname} #{author.lastname}
+          div.text-end
+            a(href="/authors/create").text-primary Créer un nouvel auteur
+        .form-group 
+          label.form-label Année de publication
+          input(type="number", name="publication_year", required,id="publication_year", max=2022, placeholder="Année de publication").form-control
+        .form-group 
+          label.form-label Pages
+          input(type="number", name="pages", id="pages", required, placeholder="Nombre de pages").form-control
+        .form-group.mb-3
+          label.form-label Description
+          textarea(cols="30", rows="10", name="description", required, id="description", placeholder="Résumé de l'histoire").form-control
+        .form-group.mb-3
+          label.form-label Image
+          br
+          input(type="file", name="image", id="image", required).form-control-file
+        .d-flex
+          a.btn.btn-warning.me-auto(href="/books") Annuler la modification
+          button(type="submit")#validationFormAjout.btn.btn-success.ms-auto Valider
+block scripts
+  script(src="/javascript/main.js") 
