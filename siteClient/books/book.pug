@@ -57,11 +57,11 @@ block content
             input(type="file", name="image", id="image", required).form-control-file.d-block
             button(type="submit").btn.btn-primary.mt-2 Modifier l'image
   .row
+    if !isModif
     .col
-      if !isModif
-        a.mt-4.btn.btn-warning.w-100(href=`/books/edit/${book._id}`) 
-          i(class="fas fa-edit me-2") 
-          span Modifier 
+      a.mt-4.btn.btn-warning.w-100(href=`/books/edit/${book._id}`) 
+        i(class="fas fa-edit me-2") 
+        span Modifier 
     .col
       a.mt-4.btn.btn-secondary.w-100(href="/books") 
         i(class="fas fa-chevron-left me-2") 
